@@ -1,4 +1,3 @@
-// src/components/EditContact.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Form, Button } from "react-bootstrap";
@@ -12,6 +11,7 @@ const EditContact = ({ contacts, onEditContact }) => {
   const [email, setEmail] = useState(contact.email);
   const [phone, setPhone] = useState(contact.phone);
   const [profilepic, setProfilepic] = useState(contact.profilepic);
+  const [newProfilePic, setNewProfilePic] = useState(null);
 
   useEffect(() => {
     setName(contact.name);
@@ -20,9 +20,22 @@ const EditContact = ({ contacts, onEditContact }) => {
     setProfilepic(contact.profilepic);
   }, [contact]);
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setNewProfilePic(file);
+      setProfilepic(URL.createObjectURL(file)); // Update profilepic with a preview URL
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    const updatedContact = { name, email, phone, profilepic };
+    const updatedContact = {
+      name,
+      email,
+      phone,
+      profilepic: newProfilePic ? URL.createObjectURL(newProfilePic) : profilepic, // Use the new image URL if provided
+    };
     onEditContact(id, updatedContact); // Update the contact
     alert("Contact edited successfully!");
     navigate(`/view/${id}`); // Redirect to the View page after editing
@@ -57,12 +70,21 @@ const EditContact = ({ contacts, onEditContact }) => {
           />
         </Form.Group>
         <Form.Group>
-          <Form.Label>Profile Picture URL</Form.Label>
+          <Form.Label>Profile Picture</Form.Label>
           <Form.Control
-            type="text"
-            value={profilepic}
-            onChange={(e) => setProfilepic(e.target.value)}
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
           />
+          {profilepic && (
+            <div className="mt-3">
+              <img
+                src={profilepic}
+                alt="Profile Preview"
+                style={{ width: "100px", height: "100px", objectFit: "cover" }}
+              />
+            </div>
+          )}
         </Form.Group>
         <Button type="submit" variant="primary" className="mt-3">
           Save Changes

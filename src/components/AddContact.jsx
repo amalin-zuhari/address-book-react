@@ -12,32 +12,40 @@ const AddContact = ({ onAddContact }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onAddContact({ name, email, phone });
-    setShowAlert(true);
-    navigate("/");
+
+    // Create new contact with profile pic
+    const newContact = {
+      name,
+      email,
+      phone,
+      profilepic: profile ? URL.createObjectURL(profile) : null, // Generate a temporary URL for the uploaded image
+    };
+
+    onAddContact(newContact); // Add the new contact
+    setShowAlert(true); // Show success alert
+
+    // Redirect to AddressBook
+    setTimeout(() => {
+      navigate("/");
+    }, 1500); // Small delay to display the alert before navigation
   };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setProfile(file);
+      setProfile(file); // Set the selected file as the profile picture
     }
   };
 
   return (
     <div className="container py-5">
       <h2>Add New Contact</h2>
-      {showAlert && (
-        <Alert variant="success">Contact added successfully!</Alert>
-      )}
+      {showAlert && <Alert variant="success">Contact added successfully!</Alert>}
+
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
           <Form.Label>Profile Picture</Form.Label>
-          <Form.Control
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-          />
+          <Form.Control type="file" accept="image/*" onChange={handleFileChange} />
           {profile && (
             <div className="mt-3">
               <img
@@ -56,15 +64,14 @@ const AddContact = ({ onAddContact }) => {
             value={name}
             onChange={(e) => {
               const formattedName = e.target.value
-                .toLowerCase() // Convert the entire input to lowercase first
-                .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize the first letter of each word
-              setName(formattedName); // Update the state with the formatted name
+                .toLowerCase()
+                .replace(/\b\w/g, (char) => char.toUpperCase());
+              setName(formattedName);
             }}
             required
           />
         </Form.Group>
 
-        {/* Input phone number */}
         <Form.Group className="mb-3">
           <Form.Label>Phone</Form.Label>
           <Form.Control
@@ -75,7 +82,6 @@ const AddContact = ({ onAddContact }) => {
           />
         </Form.Group>
 
-        {/* Input email */}
         <Form.Group className="mb-3">
           <Form.Label>Email</Form.Label>
           <Form.Control
@@ -85,7 +91,6 @@ const AddContact = ({ onAddContact }) => {
           />
         </Form.Group>
 
-        {/* Add New Contact */}
         <Form.Group className="mb-3">
           <Button type="submit" className="btn btn-primary">
             Add to Contact
