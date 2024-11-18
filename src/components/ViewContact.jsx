@@ -13,12 +13,16 @@ const ViewContact = ({ contacts, onDelete, onEdit }) => {
   }
 
   const handleDelete = () => {
-    onDelete(id); // Delete the contact
-    navigate("/"); // Redirect to home after deletion
+    console.log("Deleting contact with ID:", id); // Debugging
+    onDelete(id); // Update state
+    setTimeout(() => {
+      alert("Contact deleted successfully!");
+      navigate("/"); // Navigate after confirming state update
+    }, 300); // Add a small delay if needed
   };
+  
 
   const handleEdit = () => {
-    onEdit(id, contact); // Navigate to edit page, passing the contact's data
     navigate(`/edit/${id}`); // Navigate to the edit page for this contact
   };
 
@@ -43,7 +47,7 @@ const ViewContact = ({ contacts, onDelete, onEdit }) => {
 
         {/* Edit and Delete buttons */}
         <div className="mt-4">
-          <Button variant="warning" className="me-2" onClick={handleEdit}>
+          <Button variant="primary" className="me-2" onClick={handleEdit}>
             Edit
           </Button>
           <Button variant="danger" onClick={handleDelete}>

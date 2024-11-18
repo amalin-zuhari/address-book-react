@@ -1,5 +1,4 @@
-// src/App.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import AddressBook from './components/AddressBook';
 import AddContact from './components/AddContact';
@@ -13,39 +12,47 @@ const App = () => {
       name: 'John Doe',
       email: 'johndoe@example.com',
       phone: '123-456-7890',
-      profilepic: 'bob.jpg',
+      profilepic: 'john.jpg',
     },
     {
       name: 'Jane Smith',
       email: 'janesmith@example.com',
       phone: '987-654-3210',
-      profilepic: 'alice.png',
+      profilepic: 'daisy.png',
     },
     {
       name: 'Alice Johnson',
       email: 'alicej@example.com',
       phone: '555-555-5555',
-      profilepic: 'charlie.png',
+      profilepic: 'alice.png',
     },
   ]);
 
   // Add a new contact
   const handleAdd = (newContact) => {
-    setContacts([...contacts, newContact]);
+    setContacts((prevContacts) => [...prevContacts, newContact]);
+    console.log('New contact added:', newContact);
   };
 
   // Delete a contact by its index
   const handleDelete = (id) => {
-    setContacts(contacts.filter((_, index) => index !== id));
+    setContacts((prevContacts) => prevContacts.filter((_, index) => index !== parseInt(id)));
+    console.log('Contact deleted with ID:', id);
   };
 
   // Edit a contact by its index
   const handleEdit = (id, updatedContact) => {
-    const updatedContacts = contacts.map((contact, index) =>
-      index === parseInt(id) ? { ...contact, ...updatedContact } : contact
+    setContacts((prevContacts) =>
+      prevContacts.map((contact, index) =>
+        index === parseInt(id) ? { ...contact, ...updatedContact } : contact
+      )
     );
-    setContacts(updatedContacts);
+    console.log('Contact edited with ID:', id, 'Updated Contact:', updatedContact);
   };
+
+  useEffect(() => {
+    console.log('Updated contacts:', contacts);
+  }, [contacts]);
 
   return (
     <Routes>

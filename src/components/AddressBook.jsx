@@ -2,6 +2,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button, ListGroup } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 const AddressBook = ({ contacts, handleDelete }) => {
   return (
@@ -12,7 +14,10 @@ const AddressBook = ({ contacts, handleDelete }) => {
       <ListGroup className="mt-4">
         {contacts.length > 0 ? (
           contacts.map((contact, index) => (
-            <ListGroup.Item key={index} className="d-flex justify-content-between align-items-center">
+            <ListGroup.Item
+              key={index}
+              className="d-flex justify-content-between align-items-center"
+            >
               <div className="d-flex align-items-center">
                 {/* Profile Picture */}
                 <img
@@ -26,7 +31,7 @@ const AddressBook = ({ contacts, handleDelete }) => {
                   }}
                 />
                 {/* Contact Name with Link to View */}
-                <Link to={`/view/${index}`} style={{ textDecoration: 'none' }}>
+                <Link to={`/view/${index}`} style={{ textDecoration: "none" }}>
                   <span>{contact.name}</span>
                 </Link>
               </div>
@@ -35,7 +40,7 @@ const AddressBook = ({ contacts, handleDelete }) => {
                 size="sm"
                 onClick={() => handleDelete(index)}
               >
-                Delete
+                <FontAwesomeIcon icon={faTrash} />
               </Button>
             </ListGroup.Item>
           ))

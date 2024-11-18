@@ -24,6 +24,7 @@ const EditContact = ({ contacts, onEditContact }) => {
     e.preventDefault();
     const updatedContact = { name, email, phone, profilepic };
     onEditContact(id, updatedContact); // Update the contact
+    alert("Contact edited successfully!");
     navigate(`/view/${id}`); // Redirect to the View page after editing
   };
 
